@@ -35,45 +35,45 @@
 </table>
 
 <script>
-    var url='ws://localhost:8000/ws/new/'
+    var url='ws://localhost:8000/ws/new/';
 
     var socket=new WebSocket(url);
 
     socket.onopen=function(e){
-        console.log('socket connected')
+        console.log('socket connected');
     }
     socket.onmessage=function(e){
         var data=JSON.parse(e.data);
-        console.log(data)
+        console.log(data);
         if(data.payload){
-            addData(data.payload)
-            increaseProgress(data.payload.total,data.payload.current_total)
+            addData(data.payload);
+            increaseProgress(data.payload.total,data.payload.current_total);
         }
     }
     socket.onclose=function(e){
-        console.log('socket disconnected')
+        console.log('socket disconnected');
     }
 
     function addData(data){
         var html = '
         <tr>
-      <th scope="row">${data.id}</th>
-      <td>${data.student_name}</td>
-      <td>${data.student_age}</td>
-      <td>${data.address}</td>
-    </tr>
-    '
-    document.getElementById('table_data').innerHTML +=html
+            <th scope="row">${data.id}</th>
+            <td>${data.student_name}</td>
+            <td>${data.student_age}</td>
+            <td>${data.address}</td>
+        </tr>
+        ';
+        document.getElementById('table_data').innerHTML +=html;
     }
 
     function increaseProgress(total,current_total){
-        var element = document.querySelector('.progress-bar')
+        var element = document.querySelector('.progress-bar');
 
-        var parcent = parseInt((current_total / total)* 100)
+        var parcent = parseInt((current_total / total)* 100);
 
-        document.getElementById('complete').innerHTML = parcent + '%'
+        document.getElementById('complete').innerHTML = parcent + '%';
 
-        element.style.width = parcent + '%'
+        element.style.width = parcent + '%';
 
     }
 </script>
