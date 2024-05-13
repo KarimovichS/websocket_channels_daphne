@@ -6,6 +6,16 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 
+class Students(models.Model):
+    student_name = models.CharField(max_length=100)
+    student_email = models.EmailField(max_length=100)
+    address = models.CharField(max_length=100)
+    age = models.IntegerField()
+
+    def __str__(self):
+        return self.student_name
+
+
 class Notifications(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     notification = models.TextField(max_length=100)
