@@ -12,7 +12,7 @@
 <div class="container mt-5 pt-5">
     <p>Percent completed:<span id="complete"></span></p>
     <div class="progress">
-        <div class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: 50%;"
+        <div class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: 0%;"
              aria-valuenow="25" aria-valuemin="0"
              aria-valuemax="100"></div>
     </div>
@@ -35,46 +35,46 @@
 </table>
 
 <script>
-    var url='ws://localhost:8000/ws/new/';
+    var url = 'ws://localhost:8000/ws/new/';
+    var socket = new WebSocket(url);
 
-    var socket=new WebSocket(url);
+    socket.onopen = function(e) {
+        console.log('WebSocket connected');
+    };
 
-    socket.onopen=function(e){
-        console.log('socket connected');
-    }
-    socket.onmessage=function(e){
-        var data=JSON.parse(e.data);
+    socket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
         console.log(data);
-        if(data.payload){
+        if (data.payload) {
             addData(data.payload);
-            increaseProgress(data.payload.total,data.payload.current_total);
+            increaseProgress(data.payload.total, data.payload.current_total);
         }
-    }
-    socket.onclose=function(e){
-        console.log('socket disconnected');
-    }
+    };
 
-    function addData(data){
-        var html = '
+    socket.onclose = function(e) {
+        console.log('WebSocket disconnected');
+    };
+
+    socket.onerror = function(error) {
+        console.log('WebSocket Error: ' + error.message);
+    };
+
+    function addData(data) {
+        var html = `
         <tr>
             <th scope="row">${data.id}</th>
             <td>${data.student_name}</td>
             <td>${data.student_age}</td>
             <td>${data.address}</td>
         </tr>
-        ';
-        document.getElementById('table_data').innerHTML +=html;
+        `;
+        document.getElementById('table_data').innerHTML += html;
     }
 
-    function increaseProgress(total,current_total){
-        var element = document.querySelector('.progress-bar');
-
-        var parcent = parseInt((current_total / total)* 100);
-
-        document.getElementById('complete').innerHTML = parcent + '%';
-
-        element.style.width = parcent + '%';
-
+    function increaseProgress(total, current_total) {
+        var percent = (current_total / total) * 100;
+        document.getElementById('complete').innerHTML = percent.toFixed(0) + '%';
+        document.querySelector('.progress-bar').style.width = percent.toFixed(0) + '%';
     }
 </script>
 

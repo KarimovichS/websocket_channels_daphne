@@ -30,6 +30,7 @@ class CreateStudentsThread(threading.Thread):
                     address=fake.address(),
                     age=random.randint(10, 50)
                 )
+                channel_layer = get_channel_layer()
                 data = {'id': current_total,
                         'current_total': current_total,
                         'total': self.total,
@@ -44,6 +45,6 @@ class CreateStudentsThread(threading.Thread):
                         'value': json.dumps(data)
                     }
                 )
-                time.sleep(1)
+                # time.sleep(1)
         except Exception as e:
             print(e)
